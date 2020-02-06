@@ -8,27 +8,38 @@
 
 
 $(document).ready(function() {
-  var query = 'avengers';
+  $('.cerca').click(function(){
+    $('.films').html('');
+    var titolo = $(".nome_film").val();
+
    $.ajax ({
      url: 'https://api.themoviedb.org/3/search/movie',
      method: 'GET',
      data: {
        api_key :'0583692d32d7741ad021d9a29bea3bc4' ,
-       query : query,
-       language: 'it-IT'
+       query : titolo,
+       language: 'it'
      },
      success: function(data) {
        var films = data.results;
-       // console.log(films);
-       printFilm(films);
+       if (!films.length == 0) {
+         printFilm(films);
+       } else {
+         alert('film non trovato');
+       }
      },
      error: function (request, state, errors) {
        console.log(errors);
      }
    });
-
+ });
 });
 
+
+
+
+
+// ----------------------FUNZIONI
 function printFilm(films) {
   var source =$("#film-template").html();
   var template = Handlebars.compile(source);

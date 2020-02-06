@@ -11,12 +11,14 @@
   <title>Document</title>
 </head>
 <body>
+  <input class="nome_film" type="text" placeholder="nome film" value="">
+  <button class='cerca'>cerca</button>
   <ul class="films">
 
   </ul>
 
   <script id="film-template" type="text/x-handlebars-template">
-    <li>{{title}} - {{original_title}} - {{original_title}} - {{vote_average}}
+    <li>{{title}} - {{original_title}} - {{original_language}} - {{vote_average}}
   </script>
 
   <script src="js/script.js" charset="utf-8"></script>

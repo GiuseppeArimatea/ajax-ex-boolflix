@@ -8,50 +8,119 @@
 
 
 $(document).ready(function() {
-  $('.cerca').click(function(){
-    $('.films').html('');
-    var titolo = $(".nome_film").val();
 
-   $.ajax ({
-     url: 'https://api.themoviedb.org/3/search/movie',
-     method: 'GET',
-     data: {
-       api_key :'0583692d32d7741ad021d9a29bea3bc4' ,
-       query : titolo,
-       language: 'it'
-     },
-     success: function(data) {
-       var films = data.results;
-       if (!films.length == 0) {
-         printFilm(films);
-       } else {
-         alert('film non trovato');
-       }
-     },
-     error: function (request, state, errors) {
-       console.log(errors);
-     }
-   });
- });
+  $('.cerca').click(function(){ // click su cerca
+
+    resetta_lista();
+
+    var titolo = $(".nome_film").val(); // prende il valore titolo dall input
+
+    cercaFilm(titolo);
+    cercaSerieTv(titolo);
+  });
+
 });
 
 
 
-
-
 // ----------------------FUNZIONI
-function printFilm(films) {
+
+function cercaFilm(string) { // chiamata all api per i film
+  $.ajax (
+    {
+    url: 'https://api.themoviedb.org/3/search/movie',
+    method: 'GET',
+    data: {
+      api_key :'0583692d32d7741ad021d9a29bea3bc4' ,
+      query : string,
+      language: 'it'
+    },
+    success: function(data) {
+      var dati = data.results;
+      if (!dati.length == 0) {
+        print(dati);
+      } else {
+        alert('film non trovato');
+      }
+    },
+    error: function (request, state, errors) {
+      alert("E' avvenuto un errore. " + errori);
+      }
+    }
+  );
+  reset();
+}
+
+function cercaSerieTv(string){ // chiamata all api per le serie tv
+  $.ajax(
+    {
+    url: "https://api.themoviedb.org/3/search/tv",
+    method: "GET",
+    data: {
+          api_key: "0583692d32d7741ad021d9a29bea3bc4",
+          query: string,
+          language: "it"
+        },
+    success: function (data) {
+      console.log(data);
+      var dati = data.results;
+      if(!dati.length == 0){
+      print(dati);
+    }else{
+      alert('Serie tv non trovata');
+    }
+      },
+    error: function (richiesta, stato, errori) {
+      alert("E' avvenuto un errore. " + errori);
+      }
+    }
+  );
+  reset();
+};
+
+function printStelle(votiFilm){ // aggiungiamo le stelle
+  var somma= '';
+  for (var i = 0; i < 5; i++) {
+    if ( i < votiFilm) {
+      var risultato = '<i class="fas fa-star yellow"></i>';
+    } else {
+      var risultato = '<i class="far fa-star yellow"></i>';
+    }
+    somma += risultato;
+  }
+  return somma;
+}
+
+// funzioni di reset
+function reset(){
+  $('.nome_film').val('');
+};
+function resetta_lista(){
+  $('.films').html('');
+}
+
+
+function print(dati) {
   var source =$("#film-template").html();
   var template = Handlebars.compile(source);
 
-  for (var i = 0; i < films.length; i++) {
-    var questiFilm = films[i];
-    console.log(questiFilm);
+  for (var t = 0; t < dati.length; t++) {
+    var film = dati[t];
+    var votazione = film.vote_average / 2; //Trasformiamo il voto da 1 a 10 decimale in un numero intero da 1 a 5
+    var voti = Math.ceil(votazione);
+    console.log(film.original_name);
+    var flag = film.original_language;
+    if (flag != "it" && flag != "en" && flag != "fr") {
+      flag = "";
+    }
     var context = {
-      title: questiFilm.title,
-      original_title: questiFilm.original_title,
-      original_language: questiFilm.original_language,
-      vote_average: questiFilm.vote_average
+      title: film.title,
+      original_title: film.original_title,
+      original_language: film.original_language,
+      vote_average: film.vote_average,
+      flag: flag,
+      vote_average: voti,
+      stars: printStelle(voti)
     };
     var html = template(context);
     $('.films').append(html);

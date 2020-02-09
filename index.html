@@ -4,23 +4,39 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous"/>
+
 
   <link rel="stylesheet" href="css/style.css">
   <title>Document</title>
 </head>
+
 <body>
   <input class="nome_film" type="text" placeholder="nome film" value="">
   <button class='cerca'>cerca</button>
   <ul class="films">
-
   </ul>
 
+
   <script id="film-template" type="text/x-handlebars-template">
-    <li>{{title}} - {{original_title}} - {{original_language}} - {{vote_average}}
+    <li>{{title}}</li>
+    <ul>
+      <li>{{original_title}}</li>
+      <li>{{original_language}}
+          <img class='flag_space' src="img/{{flag}}.jpg" alt=""/>
+      </li>
+      <li class="voto">{{vote_average}} {{{stars}}}</li>
+    </ul>
   </script>
 
+  <script id="stars" type="text/x-handlebars-template">
+      <i class="star fas fa-star {{numero}}"></i>
+    </script>
+
+
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/4.1.2/handlebars.min.js"></script>
   <script src="js/script.js" charset="utf-8"></script>
 </body>
 </html>

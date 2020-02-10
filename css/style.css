@@ -1,9 +1,15 @@
-
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin:0;
+}
 .yellow{
   color: yellow;
 }
 
-
+h1 {
+  color: red;
+}
 img {
   height:20px;
   vertical-align: middle;
@@ -11,4 +17,51 @@ img {
 li {
   list-style: none;
   line-height: 20px;
+}
+.copertina > img {
+  height: 100%;
+  width: 100%;
+}
+
+.padding{
+  padding: 20px;
+  font-size: 14px;
+  margin-top: 70px;
+}
+.flex {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+  background: black;
+  height: 4rem;
+}
+.film_style {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  background-color: grey;
+}
+
+.style {
+  border: 1px solid white;
+  width: 15%;
+  height: 300px;
+  margin: 20px ;
+  background-color: black;
+  color: white;
+  text-align: center;
+  position: relative;
+  font-size: 0.7em;
+}
+
+.copertina {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+.style:hover .copertina {
+  display: none;
 }

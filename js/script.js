@@ -76,7 +76,7 @@ function cercaSerieTv(string){ // chiamata all api per le serie tv
 
 function printStelle(votiFilm){ // aggiungiamo le stelle
   var somma= '';
-  for (var i = 0; i <= 5; i++) {
+  for (var i = 0; i < 5; i++) {
     if ( i < votiFilm) {
       var risultato = '<i class="fas fa-star yellow"></i>';
     } else {
@@ -116,7 +116,7 @@ function print(type, results) {
     var votazione = thisResult.vote_average / 2; //Trasformiamo il voto da 1 a 10 decimale in un numero intero da 1 a 5
     var voti = Math.ceil(votazione);
     var flag = thisResult.original_language;
-    if (flag != "it" && flag != "en" && flag != "fr") {
+    if (flag != "it" && flag != "en") {
       flag = "";
     }
     var context = {
@@ -125,6 +125,7 @@ function print(type, results) {
       original_title: originalTitle,
       original_language: thisResult.original_language,
       vote_average: thisResult.vote_average,
+      poster_path :"https://image.tmdb.org/t/p/w185" + thisResult.poster_path,
       flag: flag,
       vote_average: voti,
       stars: printStelle(voti)

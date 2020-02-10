@@ -10,15 +10,11 @@
 $(document).ready(function() {
 
   $('.cerca').click(function(){ // click su cerca
-
-    resetta_lista();
-
     var titolo = $(".nome_film").val(); // prende il valore titolo dall input
-
+    reset();
     cercaFilm(titolo);
     cercaSerieTv(titolo);
   });
-
 });
 
 
@@ -36,9 +32,9 @@ function cercaFilm(string) { // chiamata all api per i film
       language: 'it'
     },
     success: function(data) {
-      var dati = data.results;
-      if (!dati.length == 0) {
-        print(dati);
+      if (data.total_results > 0) {
+        var film = data.results;
+        print('film', film);
       } else {
         alert('film non trovato');
       }
@@ -63,11 +59,11 @@ function cercaSerieTv(string){ // chiamata all api per le serie tv
         },
     success: function (data) {
       console.log(data);
-      var dati = data.results;
-      if(!dati.length == 0){
-      print(dati);
-    }else{
-      alert('Serie tv non trovata');
+      if(data.total_results > 0){
+        var serie = data.results;
+        print('serie', serie);
+      }else{
+        alert('Serie tv non trovata');
     }
       },
     error: function (richiesta, stato, errori) {
@@ -80,7 +76,7 @@ function cercaSerieTv(string){ // chiamata all api per le serie tv
 
 function printStelle(votiFilm){ // aggiungiamo le stelle
   var somma= '';
-  for (var i = 0; i < 5; i++) {
+  for (var i = 0; i <= 5; i++) {
     if ( i < votiFilm) {
       var risultato = '<i class="fas fa-star yellow"></i>';
     } else {
@@ -94,35 +90,46 @@ function printStelle(votiFilm){ // aggiungiamo le stelle
 // funzioni di reset
 function reset(){
   $('.nome_film').val('');
-};
-function resetta_lista(){
   $('.films').html('');
-}
+  $('.serie').html('');
+};
 
 
-function print(dati) {
+function print(type, results) {
   var source =$("#film-template").html();
   var template = Handlebars.compile(source);
+  var title;
+  var originalTitle;
 
-  for (var t = 0; t < dati.length; t++) {
-    var film = dati[t];
-    var votazione = film.vote_average / 2; //Trasformiamo il voto da 1 a 10 decimale in un numero intero da 1 a 5
+  for (var i = 0; i < results.length; i++) {
+    var thisResult = results[i];
+
+    if (type == 'film') {
+      originalTitle = thisResult.original_title;
+      title = thisResult.title;
+      var container = $('.films');
+    } else if (type == 'serie'){
+      originalTitle = thisResult.original_name;
+      title = thisResult.name;
+      var container = $('.serie');
+    }
+    var votazione = thisResult.vote_average / 2; //Trasformiamo il voto da 1 a 10 decimale in un numero intero da 1 a 5
     var voti = Math.ceil(votazione);
-    console.log(film.original_name);
-    var flag = film.original_language;
+    var flag = thisResult.original_language;
     if (flag != "it" && flag != "en" && flag != "fr") {
       flag = "";
     }
     var context = {
-      title: film.title,
-      original_title: film.original_title,
-      original_language: film.original_language,
-      vote_average: film.vote_average,
+      type: type,
+      title: title,
+      original_title: originalTitle,
+      original_language: thisResult.original_language,
+      vote_average: thisResult.vote_average,
       flag: flag,
       vote_average: voti,
       stars: printStelle(voti)
     };
     var html = template(context);
-    $('.films').append(html);
+    container.append(html);
   }
 }

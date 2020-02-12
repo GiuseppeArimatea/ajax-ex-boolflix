@@ -15,13 +15,21 @@ $(document).ready(function() {
     cercaFilm(titolo);
     cercaSerieTv(titolo);
   });
+  $('.nome_film').keypress(function(event) { // tramite invio tastiera
+      if(event.which == 13) {
+        var titolo = $(".nome_film").val(); // prende il valore titolo dall input
+        reset();
+        cercaFilm(titolo);
+        cercaSerieTv(titolo);
+      }
+    });
 });
 
 
 
 // ----------------------FUNZIONI
-
-function cercaFilm(string) { // chiamata all api per i film
+// chiamata all api per i film
+function cercaFilm(string) {
   $.ajax (
     {
     url: 'https://api.themoviedb.org/3/search/movie',
@@ -46,7 +54,7 @@ function cercaFilm(string) { // chiamata all api per i film
   );
   reset();
 }
-
+// chiamata all api per le serie
 function cercaSerieTv(string){ // chiamata all api per le serie tv
   $.ajax(
     {
